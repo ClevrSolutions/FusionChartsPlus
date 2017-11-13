@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="FusionChartsPlusWidget.FusionChartsWidget" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+	<name>FusionChartsPlusWidget</name>
+	<description>View the Fusionchart chart</description>
+
+	<icon>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAUGFpbnQuTkVUIHYzLjUuNUmK/OAAAAHySURBVDhP7ZPdS1MBGMaP3UVE0E1XBY3yKmoYfUB2EZkSiBHWhVmjFuq0KNgxlyWxnU0bRRndiWLhStrW+iBbbCgNZE0s5li0FD9msqiVH2us0HnO+XW8qX/CBx7em4fn4vfwCsKqBBl1jaoqBYq8vE7OLzM/m2UsMU00kmD4neb3E4zEphlNpvkxl2VRy8iKsuEfOllWN839nMf/NEK7/SVWsRep0YO90UdbyyucrUGcd0LcfzDMQ0+MvsBnovEZFrI5VFVF+P51lrZmNw6zD4foxa7da6ZezMYOxIZOTLX3aLs9wN3OCN3uGM/8E7wJTREaGif3exFh8O0I1y+5cDQ+wS5qRVqJpaYHc3UXTRe7aTdXc7PqCNLpCmxnTyHV1CNdaKLuvJPJiSTCQDBMsd6AsdLK1YZurGY3NtGHpf4RV4wu4h16lh5vZMm1mT9dhaRu6Bi17KS0qIL4p3GExMcx9IXl7NIdZc+OE5QU13KsVKSyvJmq43b6W/Yy49xK0qZjqmUbk1IRieeteHyvyWSzCIqS3xIe/MC5Mxb27z7JwX0GDh8wUXLoMmVlIkHJwHRPHV9e3CI13EduIY2qKGhar3mtoJEsWLEsy2Qyv4hFEwT8YdzefrzeAKlvaRRV3b4ymyLnCxRt8pX86gf8J/AXbk9fLYx5ze8AAAAASUVORK5CYII=</icon>
+	<properties>
+		<property key="width" type="integer" defaultValue="500">
+			<caption>Width(in pixels)</caption>
+			<category>Size</category>
+			<description></description>
+		</property>
+		<property key="height" type="integer" defaultValue="400">
+			<caption>Height(in pixels)</caption>
+			<category>Size</category>
+			<description></description>
+		</property>
+		<property key="refresh" type="boolean" defaultValue="false">
+			<caption>Refresh</caption>
+			<category>Widget</category>
+			<description>Refresh the Chart</description>
+		</property>
+		<property key="refreshInterval" type="integer" defaultValue="5">
+			<caption>Refresh Interval</caption>
+			<category>Widget</category>
+			<description>Refresh interval in minutes</description>
+		</property>
+		<property key="refreshMicroflow" type="microflow" required="false">
+			<caption>Refresh Chart</caption>
+			<category>Widget</category>
+			<description>This microflow will be invoked when the chart automatically refreshes</description>
+			<returnType type="Void"/>
+		</property>
+		<property key="drillDownMicroflow" type="microflow" required="false">
+			<caption>Drill Down</caption>
+			<category>Widget</category>
+			<description>This microflow will be invoked when clicking a dataset of a widget</description>
+			<returnType type="Void"/>
+		</property>			
+		<property key="editNodeMicroflow" type="microflow" required="false">
+			<caption>Edit Node Action</caption>
+			<category>DragNode chart</category>
+			<description>This microflow will be invoked when the user edits a Node.</description>
+			<returnType type="Void"/>
+		</property>
+		<property key="deleteNodeMicroflow" type="microflow" required="false">
+			<caption>Delete Node Action</caption>
+			<category>DragNode chart</category>
+			<description>This microflow will be invoked when the user deletes a Node.</description>
+			<returnType type="Void"/>
+		</property>
+		<property key="addNodeMicroflow" type="microflow" required="false">
+			<caption>Add Node Action</caption>
+			<category>DragNode chart</category>
+			<description>This microflow will be invoked when the user adds a Node.</description>
+			<returnType type="Void"/>
+		</property>
+		<property key="editLinkMicroflow" type="microflow" required="false">
+			<caption>Edit Link Action</caption>
+			<category>DragNode chart</category>
+			<description>This microflow will be invoked when the user edits a Link.</description>
+			<returnType type="Void"/>
+		</property>
+		<property key="deleteLinkMicroflow" type="microflow" required="false">
+			<caption>Delete Link Action</caption>
+			<category>DragNode chart</category>
+			<description>This microflow will be invoked when the user deletes a Link.</description>
+			<returnType type="Void"/>
+		</property>
+		<property key="resetChartMicroflow" type="microflow" required="false">
+			<caption>Reset Chart Action</caption>
+			<category>DragNode chart</category>
+			<description>This microflow will be invoked when the user resets the chart with the selected node.</description>
+			<returnType type="Void"/>
+		</property>	
+	</properties>
+</widget>
