@@ -18,15 +18,12 @@
 	
 */ 
  
-dojo.provide("FusionChartsPlusWidget.FusionChartsWidget");
-dojo.require("FusionChartsPlusWidget.js.FusionCharts");
+define([
+	"dojo/_base/declare",
+	"mxui/widget/_WidgetBase"
+], function (declare, _WidgetBase) {
+	return declare("FusionChartsPlusWidget.FusionChartsWidget", [_WidgetBase], {
 
-mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
-	//DECLARATION
-	addons       : [dijit._Contained, mendix.addon._Contextable],
-	//templatePath : dojo.moduleUrl('FusionChartsPlusWidget') + "templates/FusionChartsWidget.html",
-    
-	inputargs: {
 			width:500,
 			height:400,
 			refresh:false,
@@ -38,8 +35,8 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 			addNodeMicroflow :'',
 			editLinkMicroflow :'',
 			deleteLinkMicroflow :'',
-			resetChartMicroflow :''
-    },
+			resetChartMicroflow :'',
+
 	
 	//IMPLEMENTATION
 	graphObject : null,
@@ -55,17 +52,17 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 			this.graphObject = mxObject;
 			logger.debug(this.id + ".setDataobject");
 			
-			if(this.graphObject.hasAttribute('source'))
+			if(this.graphObject.has('source'))
 			{
 				var myChart = FusionCharts( "chartid_"+this.id );
-				var chartType = this.graphObject.getAttribute('chartType');
+				var chartType = this.graphObject.get('chartType');
 				
 				if (myChart == null || this.chartType != chartType ){
 				
 					this.chartType = chartType;
 					var myChart = new FusionCharts("widgets/FusionChartsPlusWidget/Charts/" + this.chartType + '.swf', "chartid_"+this.id, this.width, this.height, "0", "1");
 					
-					var source = this.graphObject.getAttribute('source');
+					var source = this.graphObject.get('source');
 					myChart.setDataXML(source.replace(/#widgetid#/gi,this.id));
 					myChart.render("chartdiv_"+this.id);
 				     
@@ -83,7 +80,7 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 	},
 	
 	renderChart : function (myChart){
-		var source = this.graphObject.getAttribute('source');
+		var source = this.graphObject.get('source');
 		myChart.setDataXML(source.replace(/#widgetid#/gi,this.id));
 	},
 	
@@ -93,39 +90,39 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 	
 	addNode: function(NodeID){
 		
-		this.graphObject.setAttribute("SelectedID", NodeID[0]);
+		this.graphObject.set("SelectedID", NodeID[0]);
 		this.execaction(this.addNodeMicroflow);
 	},
 	
 	editNode: function(NodeID){
 		
-		this.graphObject.setAttribute("SelectedID", NodeID[0]);
+		this.graphObject.set("SelectedID", NodeID[0]);
 		this.execaction(this.editNodeMicroflow);
 	},
 	
 	deleteNode: function(NodeID){
 		
-		this.graphObject.setAttribute("SelectedID", NodeID[0]);
+		this.graphObject.set("SelectedID", NodeID[0]);
 		this.execaction(this.deleteNodeMicroflow);
 	},
 	
 	editLink: function(args){
 		
-		this.graphObject.setAttribute("FromNodeID", args[0]);
-		this.graphObject.setAttribute("ToNodeID", args[1]);
+		this.graphObject.set("FromNodeID", args[0]);
+		this.graphObject.set("ToNodeID", args[1]);
 		this.execaction(this.editLinkMicroflow);
 	},
 	
 	deleteLink: function(args){
 		
-		this.graphObject.setAttribute("FromNodeID", args[0]);
-		this.graphObject.setAttribute("ToNodeID", args[1]);
+		this.graphObject.set("FromNodeID", args[0]);
+		this.graphObject.set("ToNodeID", args[1]);
 		this.execaction(this.deleteLinkMicroflow);
 	},
 	
 	resetChart: function(NodeID){
 		
-		this.graphObject.setAttribute("SelectedID", NodeID[0]);
+		this.graphObject.set("SelectedID", NodeID[0]);
 		this.execaction(this.resetChartMicroflow);
 	},
 	
@@ -142,27 +139,28 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 	},
 	
 	drillDown: function(args){
-		this.graphObject.setAttribute("SelectedID", args[0]);
+		this.graphObject.set("SelectedID", args[0]);
 		this.execaction(this.drillDownMicroflow);
 	},
 	
 	execaction : function(mf) {
 		if (mf)
-			mx.processor.xasAction({
-				error       : function() {
-					logger.error(this.id + "error: XAS error executing microflow");
-				},
-				actionname  : mf,
-				applyto     : 'selection',
-				guids       : [this.graphObject.getGUID()]
+			mx.ui.action(mf, {
+				callback : function(){},
+				error : function() {
+					logger.error(this.id + "error: error executing microflow");
+				}
 			});
 	},
 	
 	//reload chart after ChartXML gets an update
 	objectUpdateNotification : function(mxObject){
-		var guid = dojo.isObject(mxObject) ? mxObject.getGUID() : mxObject;
+		var guid = dojo.isObject(mxObject) ? mxObject.getGuid() : mxObject;
 		
-		mx.processor.getObject(guid, dojo.hitch(this, this.setDataobject));
+		mx.data.get({
+			guid: guid, 
+			callback: dojo.hitch(this, this.setDataobject)
+		});
 	},
 
 	//summery : stub function, will be used or replaced by the client environment
@@ -189,8 +187,6 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 			if (this.domNode && this.domNode.parentNode) { //still in tree?
 				dojo.empty(this.domNode);
 				this.domNode.innerHTML = "<div class=\"FusionChartsPlus\" dojoAttachPoint=\"FCNode\"> <div id=\"chartdiv_"+this.id+"\" /> </div>";
-				this.initContext();
-				this.actRendered(); 
 			}
 		}), 1);	
     },
@@ -204,7 +200,10 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 				guid   : context.getTrackId(),
 				callback : dojo.hitch(this, this.objectUpdateNotification)
 			});
-			mx.processor.getObject(context.getActiveGUID(), dojo.hitch(this, this.setDataobject));
+			mx.data.get({
+				guid: context.trackId,
+				callback: dojo.hitch(this, this.setDataobject)
+			});
 		}else
 			logger.warn(this.id + ".applyContext received empty context");
 			
@@ -219,4 +218,7 @@ mxui.widget.declare('FusionChartsPlusWidget.FusionChartsWidget', {
 		}
 		window.fusionCallback =null;
 	}
+   });
 });
+require(["FusionChartsPlusWidget/js/FusionCharts", "FusionChartsPlusWidget/js/highcharts",
+"FusionChartsPlusWidget/js/jquery.min", "FusionChartsPlusWidget/FusionChartsWidget"], function (FusionCharts) {});
